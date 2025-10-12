@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Issue Pin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* CSS Variables for Theming - Matching Account Page */
+        :root[data-theme="light"] {
+            --primary-color: #3182ce;
+            --primary-dark: #00b3b3;
+            --secondary-color: #6b7280;
+            --background-color: #f8fafc;
+            --surface-color: #ffffff;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --border-color: #e5e7eb;
+            --border-light: #f3f4f6;
+            --error-color: #dc2626;
+            --error-light: #fef2f2;
+            --success-color: #16a34a;
+            --success-light: #f0fdf4;
+            --warning-color: #d97706;
+            --warning-light: #fffbeb;
+            --info-color: #0369a1;
+            --info-light: #f0f9ff;
+            --disabled-color: #d1d5db;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --gradient-primary: linear-gradient(135deg, #3182ce, #00b3b3);
+            --gradient-surface: linear-gradient(135deg, #ffffff, #f8fafc);
+        }
+
+        :root[data-theme="dark"] {
+            --primary-color: #3182ce;
+            --primary-dark: #00e6e6;
+            --secondary-color: #9ca3af;
+            --background-color: #111827;
+            --surface-color: #1f2937;
+            --text-primary: #f9fafb;
+            --text-secondary: #d1d5db;
+            --text-muted: #9ca3af;
+            --border-color: #374151;
+            --border-light: #4b5563;
+            --error-color: #f87171;
+            --error-light: #7f1d1d;
+            --success-color: #4ade80;
+            --success-light: #14532d;
+            --warning-color: #fbbf24;
+            --warning-light: #78350f;
+            --info-color: #38bdf8;
+            --info-light: #0c4a6e;
+            --disabled-color: #4b5563;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+            --gradient-primary: linear-gradient(135deg, #3182ce, #00e6e6);
+            --gradient-surface: linear-gradient(135deg, #1f2937, #111827);
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, var(--background-color), var(--surface-color));
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 400px;
+        }
+
+        .toast {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: var(--shadow-xl);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+            animation: slideIn 0.3s ease-out;
+            backdrop-filter: blur(10px);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .toast.success {
+            border-left-color: var(--success-color);
+            background: var(--success-light);
+        }
+
+        .toast.error {
+            border-left-color: var(--error-color);
+            background: var(--error-light);
+        }
+
+        .toast.warning {
+            border-left-color: var(--warning-color);
+            background: var(--warning-light);
+        }
+
+        .toast.info {
+            border-left-color: var(--info-color);
+            background: var(--info-light);
+        }
+
+        .toast-icon {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .toast.success .toast-icon { color: var(--success-color); }
+        .toast.error .toast-icon { color: var(--error-color); }
+        .toast.warning .toast-icon { color: var(--warning-color); }
+        .toast.info .toast-icon { color: var(--info-color); }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+
+        .toast-message {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: var(--text-muted);
+            padding: 0;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .toast-close:hover {
+            background: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .toast-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--border-light);
+        }
+
+        .toast-progress-bar {
+            height: 100%;
+            background: var(--primary-color);
+            animation: progressBar linear forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+        }
+
+        @keyframes progressBar {
+            from { width: 100%; }
+            to { width: 0%; }
+        }
+
+        /* Header & Navigation - Matching Account Page */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--surface-color);
+            border-bottom: 3px solid var(--primary-color);
+            backdrop-filter: none;
+            box-shadow: 0 4px 15px rgba(0, 255, 255, 0.2);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .navbar-brand:hover {
+            color: #ffffff;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+            transform: scale(1.05);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        #timer {
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            background: var(--surface-color);
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+        }
+
+        #theme-toggle {
+            background: var(--gradient-primary);
+            border: none;
+            padding: 10px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            color: #1a1a1a;
+            font-weight: bold;
+            box-shadow: var(--shadow);
+        }
+
+        #theme-toggle:hover {
+            background: linear-gradient(135deg, #00e6e6, #008080);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
+            transform: scale(1.1);
+        }
+
+        /* Main Content */
+        main {
+            padding: 40px 0;
+        }
+
+        /* Form Container - Matching Account Page Design */
+        .form-container {
+            background: linear-gradient(135deg, var(--surface-color), var(--background-color));
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border-color);
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), #ff00ff, var(--primary-color));
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite linear;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        #form-title {
+            color: var(--primary-color);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        /* Form Rows - Matching Text Block Design */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 2fr auto auto;
+            gap: 15px;
+            align-items: start;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--background-color), var(--surface-color));
+            border-radius: 16px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+            border-left: 5px solid var(--primary-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-row:hover {
+            background: linear-gradient(135deg, var(--surface-color), var(--background-color));
+            transform: translateY(-2px) translateX(5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .form-row::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .form-row:hover::before {
+            left: 100%;
+        }
+
+        @media (max-width: 1200px) {
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+        }
+
+        /* Form Groups */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group label i.fas {
+            color: var(--primary-color);
+            font-size: 0.8rem;
+        }
+
+        .copy-icon {
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+            margin-left: auto;
+            padding: 4px;
+            border-radius: 4px;
+        }
+
+        .copy-icon:hover {
+            color: var(--primary-color);
+            background: var(--border-light);
+            transform: scale(1.1);
+        }
+
+        .form-group input {
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 1rem;
+            background: var(--surface-color);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 255, 255, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .form-group input.error {
+            border-color: var(--error-color);
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+
+        .form-group input:disabled {
+            background: var(--disabled-color);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        /* Username input specific styling */
+        .username input {
+            text-transform: lowercase;
+        }
+
+        /* Error Messages */
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: none;
+            margin-top: 4px;
+        }
+
+        input.error + .error-message {
+            display: block;
+        }
+
+        /* Checkbox Container */
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 0;
+        }
+
+        .solved-checkbox {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            border: 2px solid var(--border-color);
+            background: var(--surface-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            appearance: none;
+            position: relative;
+        }
+
+        .solved-checkbox:checked {
+            background: var(--success-color);
+            border-color: var(--success-color);
+        }
+
+        .solved-checkbox:checked::after {
+            content: '✓';
+            position: absolute;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .checkbox-container label {
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        /* Delete Button */
+        .delete-btn {
+            padding: 12px 20px;
+            background: var(--error-color);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: not-allowed;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            opacity: 0.5;
+            box-shadow: var(--shadow);
+        }
+
+        .delete-btn.enabled {
+            background: var(--error-color);
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .delete-btn.enabled:hover {
+            background: #b91c1c;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Note Container - Matching Account Page Design */
+        .note-container {
+            background: linear-gradient(135deg, var(--surface-color), var(--background-color));
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .note-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), #ff00ff, var(--primary-color));
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite linear;
+        }
+
+        #note {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .form-note {
+            position: relative;
+        }
+
+        #note-text {
+            width: 100%;
+            padding: 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            background: var(--background-color);
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: inherit;
+            line-height: 1.6;
+            resize: vertical;
+            min-height: 200px;
+            transition: all 0.3s ease;
+            border-left: 5px solid var(--primary-color);
+        }
+
+        #note-text:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 255, 255, 0.1);
+        }
+
+        .copy-btn {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background: var(--gradient-primary);
+            color: #1a1a1a;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .copy-btn::before {
+            content: '📋 Copy';
+        }
+
+        .copy-btn:active::before {
+            content: '✅ Copied!';
+        }
+
+        /* Reset Button */
+        .reset-btn-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .reset-btn {
+            background: var(--gradient-primary);
+            color: #1a1a1a;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Footer - Matching Account Page */
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 40px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            background: linear-gradient(135deg, var(--surface-color), var(--background-color));
+        }
+
+        #year {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+                padding: 1rem;
+            }
+
+            .nav-links {
+                gap: 15px;
+            }
+
+            main {
+                padding: 20px 0;
+            }
+
+            .form-container,
+            .note-container {
+                padding: 20px;
+                border-radius: 16px;
+            }
+
+            #form-title {
+                font-size: 1.5rem;
+            }
+
+            #note {
+                font-size: 1.3rem;
+            }
+
+            .form-row {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .toast-container {
+                right: 10px;
+                left: 10px;
+                max-width: none;
+            }
+
+            .toast {
+                padding: 12px;
+            }
+
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+
+            #timer {
+                font-size: 1rem;
+                padding: 6px 12px;
+            }
+
+            #theme-toggle {
+                padding: 8px 10px;
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--background-color);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Selection Styling */
+        ::selection {
+            background: rgba(0, 255, 255, 0.3);
+            color: var(--text-primary);
+        }
+
+        /* Focus Styles */
+        button:focus,
+        input:focus,
+        textarea:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="toast-container" id="toast-container"></div>
+    
+    <header>
+        <nav class="navbar container">
+            <a class="navbar-brand" onclick="showNotification()">HR Support</a>
+            
+            <div class="nav-links">
+                <div id="timer">00:00:00</div>
+                <button id="theme-toggle" aria-label="Switch to dark theme">🌙</button>
+            </div>
+        </nav>
+    </header><br>
+
+    <main class="container" id="main-content">
+        <div class="form-container">
+            <form id="userForm" aria-labelledby="form-title">
+                <h2 id="form-title"> Pin your Issue</h2><br />
+                <div id="form-rows-container">
+                    <!-- Form rows will be dynamically added here -->
+                </div>
+            </form>
+        </div>
+
+        <section class="note-container">
+            <h2 id="note">Note <i class="fas fa-clipboard copy-icon" onclick="copyToClipboard('note-text')" title="Copy note"></i></h2>
+            <form id="NoteForm">
+                <div class="form-note">
+                    <textarea id="note-text" rows="8" placeholder="Enter your note here"></textarea>
+                    <button type="button" class="copy-btn" onclick="copyToClipboard('note-text')" title="Copy note">
+                    </button>
+                    <div id="note-error" class="error-message"></div>
+                </div>
+                <div class="reset-btn-container">
+                    <button type="reset" onclick="return confirmReset()" class="reset-btn">Reset</button>
+                </div>
+            </section>
+
+        </main>
+            </form>
+            <footer class="footer">
+                © <span id="year"></span> HritishShaqya. All rights reserved.
+            </footer>
+    
+
+    <script>
+        function showToast({ title, message, type = 'info', duration = 5000 }) {
+            const toastContainer = document.getElementById('toast-container');
+            if (!toastContainer) return;
+            
+            const icons = {
+                success: '✓',
+                error: '✕',
+                warning: '⚠',
+                info: 'i'
+            };
+            
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <span class="toast-icon">${icons[type]}</span>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+                <span class="toast-close">&times;</span>
+                <div class="toast-progress">
+                    <div class="toast-progress-bar" style="animation-duration: ${duration}ms"></div>
+                </div>
+            `;
+            
+            const closeBtn = toast.querySelector('.toast-close');
+            closeBtn.addEventListener('click', () => {
+                removeToast(toast);
+            });
+            
+            toastContainer.appendChild(toast);
+            
+            if (duration > 0) {
+                setTimeout(() => {
+                    removeToast(toast);
+                }, duration);
+            }
+            
+            return toast;
+        }
+        
+        function removeToast(toast) {
+            toast.style.animation = 'slideOut 0.3s ease-out forwards';
+            toast.addEventListener('animationend', () => {
+                toast.remove();
+            });
+        }
+        
+        function copyToClipboard(fieldId) {
+            const element = document.getElementById(fieldId);
+            if (!element) return;
+            
+            if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                element.select();
+                element.setSelectionRange(0, 99999); // For mobile devices
+            } else {
+                const range = document.createRange();
+                range.selectNode(element);
+                window.getSelection().removeAllRanges();
+                window.getSelection().addRange(range);
+            }
+            
+            try {
+                document.execCommand('copy');
+                
+                let fieldName = '';
+                if (fieldId === 'phone' || fieldId.includes('phone-')) {
+                    fieldName = 'Phone number';
+                } else if (fieldId === 'username' || fieldId.includes('username-')) {
+                    fieldName = 'Username';
+                } else if (fieldId === 'issue' || fieldId.includes('issue-')) {
+                    fieldName = 'Issue description';
+                } else if (fieldId === 'note-text') {
+                    fieldName = 'Note';
+                }
+                
+                showToast({
+                    title: 'Copied!',
+                    message: `${fieldName} copied to clipboard`,
+                    type: 'success',
+                    duration: 2000
+                });
+            } catch (err) {
+                showToast({
+                    title: 'Error',
+                    message: 'Failed to copy text',
+                    type: 'error',
+                    duration: 2000
+                });
+            }
+            
+            if (window.getSelection) {
+                window.getSelection().removeAllRanges();
+            }
+        }
+
+        function showNotification() {
+            showToast({
+                title: 'Welcome!',
+                message: 'You are using HR Support System',
+                type: 'info',
+                duration: 3000
+            });
+        }
+        
+        const form = document.getElementById("userForm");
+        const formRowsContainer = document.getElementById("form-rows-container");
+        const noteForm = document.getElementById("NoteForm");
+        const noteText = document.getElementById("note-text");
+        const yearSpan = document.getElementById("year");
+        yearSpan.textContent = new Date().getFullYear();
+
+        const pageName = window.location.pathname.split("/").pop().replace(".html", "");
+
+        function restrictToNumbers(event) {
+            const charCode = event.which || event.keyCode;
+            if (charCode !== 8 && charCode !== 13 && (charCode < 48 || charCode > 57)) {
+                event.preventDefault();
+            }
+        }
+
+        // Auto lowercase for username
+        function autoLowercaseUsername(input) {
+            input.value = input.value.toLowerCase().replace(/\s+/g, '');
+        }
+
+        function loadFormData() {
+            const savedData = localStorage.getItem(`formData_${pageName}`);
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                data.forEach((row, index) => {
+                    createNewRow(row);
+                });
+            } else {
+                // Create first empty row if no data exists
+                createNewRow();
+            }
+        }
+
+        function saveFormData() {
+            const rows = formRowsContainer.querySelectorAll(".form-row");
+            const data = Array.from(rows).map((row) => ({
+                username: row.querySelector('input[name="username"]').value,
+                phone: row.querySelector('input[name="phone"]').value,
+                issue: row.querySelector('input[name="issue"]').value,
+                solved: row.querySelector(".solved-checkbox").checked,
+            }));
+            localStorage.setItem(`formData_${pageName}`, JSON.stringify(data));
+        }
+
+        function validateInput(input) {
+            const errorElement = input.parentElement.querySelector('.error-message');
+            if (!input.value.trim()) {
+                input.classList.add("error");
+                errorElement.style.display = "block";
+                return false;
+            } else {
+                input.classList.remove("error");
+                errorElement.style.display = "none";
+                return true;
+            }
+        }
+
+        function validatePhone(input) {
+            const errorElement = input.parentElement.querySelector('.error-message');
+            const phoneRegex = /^\d{7,15}$/;
+            if (!phoneRegex.test(input.value)) {
+                input.classList.add("error");
+                errorElement.style.display = "block";
+                return false;
+            } else {
+                input.classList.remove("error");
+                errorElement.style.display = "none";
+                return true;
+            }
+        }
+
+        function updateDeleteButtons() {
+            const rows = formRowsContainer.querySelectorAll(".form-row");
+            rows.forEach((row) => {
+                const checkbox = row.querySelector(".solved-checkbox");
+                const deleteBtn = row.querySelector(".delete-btn");
+                deleteBtn.disabled = !checkbox.checked;
+                deleteBtn.classList.toggle("enabled", checkbox.checked);
+            });
+        }
+
+        function addInputListeners(row) {
+            const inputs = row.querySelectorAll('input:not(.solved-checkbox)');
+            const checkbox = row.querySelector(".solved-checkbox");
+            const deleteBtn = row.querySelector(".delete-btn");
+
+            inputs.forEach((input, index) => {
+                // Auto lowercase for username field
+                if (input.name === "username") {
+                    input.addEventListener("input", () => {
+                        autoLowercaseUsername(input);
+                        validateInput(input);
+                        saveFormData();
+                    });
+                } else if (input.name === "phone") {
+                    input.addEventListener("input", () => {
+                        input.value = input.value.replace(/[^0-9]/g, "");
+                        validatePhone(input);
+                        saveFormData();
+                    });
+                } else {
+                    input.addEventListener("input", () => {
+                        validateInput(input);
+                        saveFormData();
+                    });
+                }
+
+                input.addEventListener("keydown", (e) => {
+                    if (e.key === "Enter") {
+                        e.preventDefault();
+                        if (input.name === "issue") {
+                            const phoneInput = row.querySelector('input[name="phone"]');
+                            const usernameInput = row.querySelector('input[name="username"]');
+                            const isPhoneValid = validatePhone(phoneInput);
+                            const isUsernameValid = validateInput(usernameInput);
+
+                            if (!isPhoneValid) {
+                                phoneInput.focus();
+                                showToast({
+                                    title: 'Validation Error',
+                                    message: 'Please enter a valid phone number',
+                                    type: 'warning',
+                                    duration: 3000
+                                });
+                            } else if (!isUsernameValid) {
+                                usernameInput.focus();
+                                showToast({
+                                    title: 'Validation Error',
+                                    message: 'Please enter a valid username',
+                                    type: 'warning',
+                                    duration: 3000
+                                });
+                            } else {
+                                createNewRow();
+                                showToast({
+                                    title: 'New Row Added',
+                                    message: 'A new issue row has been created',
+                                    type: 'success',
+                                    duration: 2000
+                                });
+                            }
+                        } else if (index < inputs.length - 1) {
+                            inputs[index + 1].focus();
+                        }
+                    }
+                });
+            });
+            
+            checkbox.addEventListener("change", () => {
+                deleteBtn.disabled = !checkbox.checked;
+                deleteBtn.classList.toggle("enabled", checkbox.checked);
+                saveFormData();
+                
+                if (checkbox.checked) {
+                    showToast({
+                        title: 'Issue Solved',
+                        message: 'This issue has been marked as solved',
+                        type: 'success',
+                        duration: 2000
+                    });
+                }
+            });
+            
+            deleteBtn.addEventListener("click", () => {
+                const totalRows = formRowsContainer.querySelectorAll(".form-row").length;
+                
+                if (totalRows === 1) {
+                    // If it's the last row, just clear the data but keep the row
+                    const inputs = row.querySelectorAll('input:not(.solved-checkbox)');
+                    inputs.forEach(input => {
+                        input.value = '';
+                        input.classList.remove("error");
+                        const errorElement = input.parentElement.querySelector('.error-message');
+                        if (errorElement) {
+                            errorElement.style.display = "none";
+                        }
+                    });
+                    row.querySelector(".solved-checkbox").checked = false;
+                    deleteBtn.disabled = true;
+                    deleteBtn.classList.remove("enabled");
+                    
+                    showToast({
+                        title: 'Data Cleared',
+                        message: 'Last row data cleared, ready for new entry',
+                        type: 'info',
+                        duration: 2000
+                    });
+                } else {
+                    // If there are multiple rows, remove the current row
+                    row.remove();
+                    showToast({
+                        title: 'Row Deleted',
+                        message: 'The issue row has been removed',
+                        type: 'info',
+                        duration: 2000
+                    });
+                }
+                
+                updateDeleteButtons();
+                saveFormData();
+            });
+        }
+
+        function createNewRow(savedData = null) {
+            const timestamp = Date.now();
+            const newRow = document.createElement("div");
+            newRow.className = "form-row";
+            newRow.innerHTML = `
+                <div class="form-group phone">
+                    <label for="phone-${timestamp}">
+                        <i class="fas fa-phone"></i> Contact Number
+                        <i class="fas fa-clipboard copy-icon" onclick="copyToClipboard('phone-${timestamp}')" title="Copy phone number"></i>
+                    </label>
+                    <input type="tel" id="phone-${timestamp}" name="phone" placeholder="Contact Number." required pattern="^\\d{7,15}$" maxlength="15" onkeypress="restrictToNumbers(event)" aria-describedby="phone-${timestamp}-error" />
+                    <div class="error-message" id="phone-${timestamp}-error">Please enter a valid phone number (7-15 digits)</div>
+                </div>
+                <div class="form-group username">
+                    <label for="username-${timestamp}">
+                        <i class="fas fa-user"></i> Username
+                        <i class="fas fa-clipboard copy-icon" onclick="copyToClipboard('username-${timestamp}')" title="Copy username"></i>
+                    </label>
+                    <input type="text" id="username-${timestamp}" name="username" placeholder="Enter username" required aria-describedby="username-${timestamp}-error" />
+                    <div class="error-message" id="username-${timestamp}-error">Please enter a valid username</div>
+                </div>
+                <div class="form-group issue">
+                    <label for="issue-${timestamp}">
+                        <i class="fas fa-exclamation-circle"></i> Issue Description
+                        <i class="fas fa-clipboard copy-icon" onclick="copyToClipboard('issue-${timestamp}')" title="Copy issue description"></i>
+                    </label>
+                    <input type="text" id="issue-${timestamp}" name="issue" placeholder="Describe your issue" required aria-describedby="issue-${timestamp}-error" />
+                    <div class="error-message" id="issue-${timestamp}-error">Please describe the issue</div>
+                </div>
+                <div class="checkbox-container">
+                    <input type="checkbox" class="solved-checkbox" id="solved-${timestamp}" aria-label="Mark as solved" />
+                    <label for="solved-${timestamp}">Solved</label>
+                </div>
+                <button type="button" class="delete-btn" aria-label="Delete this row" disabled>Delete</button>
+            `;
+            formRowsContainer.appendChild(newRow);
+            addInputListeners(newRow);
+            updateDeleteButtons();
+
+            if (savedData) {
+                newRow.querySelector(`input[name="username"]`).value = savedData.username || "";
+                newRow.querySelector(`input[name="phone"]`).value = savedData.phone || "";
+                newRow.querySelector(`input[name="issue"]`).value = savedData.issue || "";
+                newRow.querySelector(`.solved-checkbox`).checked = savedData.solved || false;
+                newRow.querySelector(".delete-btn").disabled = !savedData.solved;
+                newRow.querySelector(".delete-btn").classList.toggle("enabled", savedData.solved);
+            }
+
+            // Focus on the first input if it's a new empty row
+            if (!savedData) {
+                newRow.querySelector("input[name='phone']").focus();
+            }
+        }
+
+        function saveNoteData() {
+            localStorage.setItem(`noteData_${pageName}`, noteText.value);
+        }
+        
+        function loadNoteData() {
+            const savedNote = localStorage.getItem(`noteData_${pageName}`);
+            if (savedNote) {
+                noteText.value = savedNote;
+            }
+        }
+
+        noteText.addEventListener("input", saveNoteData);
+
+        noteForm.addEventListener("reset", () => {
+            localStorage.removeItem(`noteData_${pageName}`);
+        });
+
+        function confirmReset() {
+            const confirmed = confirm("Are you sure you want to reset the Note?");
+            if (confirmed) {
+                showToast({
+                    title: 'Note Reset',
+                    message: 'Your note has been cleared',
+                    type: 'error',
+                    duration: 2000
+                });
+            }
+            return confirmed;
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('theme-toggle');
+            const html = document.documentElement;
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            html.setAttribute('data-theme', savedTheme);
+            updateToggleIcon(savedTheme);
+            
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = html.getAttribute('data-theme');
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                html.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateToggleIcon(newTheme);
+                showToast({
+                    title: 'Theme Changed',
+                    message: `Switched to ${newTheme} mode`,
+                    type: 'info',
+                    duration: 2000
+                });
+            });
+            
+            function updateToggleIcon(theme) {
+                themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+                themeToggle.setAttribute('aria-label', theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme');
+            }
+            
+            // Load form data
+            loadFormData();
+            loadNoteData();
+            
+            setTimeout(() => {
+                showToast({
+                    title: 'Welcome!',
+                    message: 'You are using HR Support System',
+                    type: 'info',
+                    duration: 3000
+                });
+            }, 500);
+            
+            startTimer();
+        });
+        
+        function startTimer() {
+            let seconds = 0;
+            const timerElement = document.getElementById('timer');
+            
+            setInterval(() => {
+                seconds++;
+                const hours = Math.floor(seconds / 3600);
+                const minutes = Math.floor((seconds % 3600) / 60);
+                const secs = seconds % 60;
+                
+                timerElement.textContent = 
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
