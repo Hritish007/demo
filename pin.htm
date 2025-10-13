@@ -4,61 +4,58 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Issue Pin</title>
+    <link rel="icon" href="img/pin.jpg" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* CSS Variables for Theming - Matching Account Page */
+        /* CSS Variables for Theming - Clean DeepSeek Style */
         :root[data-theme="light"] {
-            --primary-color: #3182ce;
-            --primary-dark: #00b3b3;
-            --secondary-color: #6b7280;
-            --background-color: #f8fafc;
-            --surface-color: #ffffff;
+            --primary-color: #1677ff;
+            --primary-hover: #4096ff;
+            --secondary-color: #666;
+            --background-color: #ffffff;
+            --surface-color: #f8f9fa;
             --text-primary: #1f2937;
-            --text-secondary: #6b7280;
-            --text-muted: #9ca3af;
-            --border-color: #e5e7eb;
+            --text-secondary: #666;
+            --text-muted: #999;
+            --border-color: #c0c0c0;
             --border-light: #f3f4f6;
-            --error-color: #dc2626;
-            --error-light: #fef2f2;
-            --success-color: #16a34a;
-            --success-light: #f0fdf4;
-            --warning-color: #d97706;
-            --warning-light: #fffbeb;
-            --info-color: #0369a1;
+            --error-color: #ff4d4f;
+            --error-light: #fff2f0;
+            --success-color: #52c41a;
+            --success-light: #f6ffed;
+            --warning-color: #faad14;
+            --warning-light: #fffbe6;
+            --info-color: #1677ff;
             --info-light: #f0f9ff;
-            --disabled-color: #d1d5db;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            --gradient-primary: linear-gradient(135deg, #3182ce, #00b3b3);
-            --gradient-surface: linear-gradient(135deg, #ffffff, #f8fafc);
+            --disabled-color: #d9d9d9;
+            --shadow: 0 1px 2px rgba(0, 0, 0, 0.03), 0 1px 6px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 3px 6px rgba(0, 0, 0, 0.07), 0 2px 8px rgba(0, 0, 0, 0.04);
+            --radius: 8px;
         }
 
         :root[data-theme="dark"] {
-            --primary-color: #3182ce;
-            --primary-dark: #00e6e6;
-            --secondary-color: #9ca3af;
-            --background-color: #111827;
-            --surface-color: #1f2937;
-            --text-primary: #f9fafb;
-            --text-secondary: #d1d5db;
-            --text-muted: #9ca3af;
-            --border-color: #374151;
-            --border-light: #4b5563;
-            --error-color: #f87171;
-            --error-light: #7f1d1d;
-            --success-color: #4ade80;
-            --success-light: #14532d;
-            --warning-color: #fbbf24;
-            --warning-light: #78350f;
-            --info-color: #38bdf8;
-            --info-light: #0c4a6e;
-            --disabled-color: #4b5563;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
-            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
-            --gradient-primary: linear-gradient(135deg, #3182ce, #00e6e6);
-            --gradient-surface: linear-gradient(135deg, #1f2937, #111827);
+            --primary-color: #1677ff;
+            --primary-hover: #4096ff;
+            --secondary-color: #a6a6a6;
+            --background-color: #141414;
+            --surface-color: #1f1f1f;
+            --text-primary: #e6e6e6;
+            --text-secondary: #a6a6a6;
+            --text-muted: #8c8c8c;
+            --border-color: #434343;
+            --border-light: #2a2a2a;
+            --error-color: #ff7875;
+            --error-light: #2a1215;
+            --success-color: #49aa19;
+            --success-light: #162312;
+            --warning-color: #d89614;
+            --warning-light: #2b2111;
+            --info-color: #1668dc;
+            --info-light: #111d2c;
+            --disabled-color: #424242;
+            --shadow: 0 1px 2px rgba(0, 0, 0, 0.25), 0 1px 6px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 3px 6px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.25);
+            --radius: 8px;
         }
 
         /* Base Styles */
@@ -69,12 +66,12 @@
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: linear-gradient(135deg, var(--background-color), var(--surface-color));
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--background-color);
             color: var(--text-primary);
             line-height: 1.6;
             min-height: 100vh;
-            transition: all 0.3s ease;
+            transition: background-color 0.2s ease, color 0.2s ease;
         }
 
         .container {
@@ -83,7 +80,7 @@
             padding: 0 20px;
         }
 
-        /* Toast Notifications */
+        /* Toast Notifications - Simplified */
         .toast-container {
             position: fixed;
             top: 100px;
@@ -91,24 +88,22 @@
             z-index: 1000;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
             max-width: 400px;
         }
 
         .toast {
             background: var(--surface-color);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 16px;
-            box-shadow: var(--shadow-xl);
+            border-radius: var(--radius);
+            padding: 12px 16px;
+            box-shadow: var(--shadow-lg);
             display: flex;
             align-items: flex-start;
             gap: 12px;
             position: relative;
             overflow: hidden;
-            animation: slideIn 0.3s ease-out;
-            backdrop-filter: blur(10px);
-            border-left: 4px solid var(--primary-color);
+            border-left: 3px solid var(--primary-color);
         }
 
         .toast.success {
@@ -132,9 +127,9 @@
         }
 
         .toast-icon {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
-            margin-top: 2px;
+            margin-top: 1px;
             flex-shrink: 0;
         }
 
@@ -150,7 +145,7 @@
         .toast-title {
             font-weight: 600;
             font-size: 14px;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
             color: var(--text-primary);
         }
 
@@ -163,7 +158,7 @@
         .toast-close {
             background: none;
             border: none;
-            font-size: 18px;
+            font-size: 16px;
             cursor: pointer;
             color: var(--text-muted);
             padding: 0;
@@ -173,7 +168,6 @@
             align-items: center;
             justify-content: center;
             border-radius: 4px;
-            transition: all 0.2s ease;
         }
 
         .toast-close:hover {
@@ -181,57 +175,14 @@
             color: var(--text-primary);
         }
 
-        .toast-progress {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: var(--border-light);
-        }
-
-        .toast-progress-bar {
-            height: 100%;
-            background: var(--primary-color);
-            animation: progressBar linear forwards;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(100%);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes slideOut {
-            from {
-                opacity: 1;
-                transform: translateX(0);
-            }
-            to {
-                opacity: 0;
-                transform: translateX(100%);
-            }
-        }
-
-        @keyframes progressBar {
-            from { width: 100%; }
-            to { width: 0%; }
-        }
-
-        /* Header & Navigation - Matching Account Page */
+        /* Header & Navigation - Clean Design */
         header {
             position: sticky;
             top: 0;
             z-index: 100;
             background: var(--surface-color);
-            border-bottom: 3px solid var(--primary-color);
-            backdrop-filter: none;
-            box-shadow: 0 4px 15px rgba(0, 255, 255, 0.2);
+            border-bottom: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
         }
 
         .navbar {
@@ -242,19 +193,11 @@
         }
 
         .navbar-brand {
-            font-size: 1.8rem;
-            font-weight: 700;
+            font-size: 1.5rem;
+            font-weight: 600;
             color: var(--primary-color);
             text-decoration: none;
             cursor: pointer;
-            transition: all 0.3s ease;
-            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
-        }
-
-        .navbar-brand:hover {
-            color: #ffffff;
-            text-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
-            transform: scale(1.05);
         }
 
         .nav-links {
@@ -265,113 +208,68 @@
 
         #timer {
             font-family: 'Monaco', 'Consolas', monospace;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--primary-color);
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-secondary);
             background: var(--surface-color);
-            padding: 8px 16px;
-            border-radius: 8px;
+            padding: 6px 12px;
+            border-radius: var(--radius);
             border: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
         }
 
         #theme-toggle {
-            background: var(--gradient-primary);
-            border: none;
-            padding: 10px 12px;
-            border-radius: 10px;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            border-radius: var(--radius);
             cursor: pointer;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-            color: #1a1a1a;
-            font-weight: bold;
-            box-shadow: var(--shadow);
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
         }
 
         #theme-toggle:hover {
-            background: linear-gradient(135deg, #00e6e6, #008080);
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
-            transform: scale(1.1);
+            background: var(--border-light);
         }
 
         /* Main Content */
         main {
-            padding: 40px 0;
+            padding: 30px 0;
         }
 
-        /* Form Container - Matching Account Page Design */
+        /* Form Container - Clean Design */
         .form-container {
-            background: linear-gradient(135deg, var(--surface-color), var(--background-color));
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: var(--shadow-xl);
+            background: var(--surface-color);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
-            margin-bottom: 40px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .form-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary-color), #ff00ff, var(--primary-color));
-            background-size: 200% 100%;
-            animation: shimmer 3s infinite linear;
-        }
-
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
+            margin-bottom: 30px;
         }
 
         #form-title {
-            color: var(--primary-color);
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
         }
 
-        /* Form Rows - Matching Text Block Design */
+        /* Form Rows - Clean Design */
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr 2fr auto auto;
-            gap: 15px;
+            gap: 12px;
             align-items: start;
-            padding: 20px;
-            background: linear-gradient(135deg, var(--background-color), var(--surface-color));
-            border-radius: 16px;
-            margin-bottom: 15px;
+            padding: 16px;
+            background: var(--surface-color);
+            border-radius: var(--radius);
+            margin-bottom: 12px;
             border: 1px solid var(--border-color);
-            border-left: 5px solid var(--primary-color);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            transition: border-color 0.2s ease;
         }
 
         .form-row:hover {
-            background: linear-gradient(135deg, var(--surface-color), var(--background-color));
-            transform: translateY(-2px) translateX(5px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .form-row::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .form-row:hover::before {
-            left: 100%;
+            border-color: var(--primary-color);
         }
 
         @media (max-width: 1200px) {
@@ -385,16 +283,16 @@
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
 
         .form-group label {
-            font-weight: 600;
-            font-size: 0.9rem;
+            font-weight: 500;
+            font-size: 0.85rem;
             color: var(--text-secondary);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .form-group label i.fas {
@@ -405,39 +303,34 @@
         .copy-icon {
             cursor: pointer;
             color: var(--text-muted);
-            transition: all 0.2s ease;
             margin-left: auto;
-            padding: 4px;
-            border-radius: 4px;
+            padding: 2px;
+            border-radius: 3px;
         }
 
         .copy-icon:hover {
             color: var(--primary-color);
             background: var(--border-light);
-            transform: scale(1.1);
         }
 
         .form-group input {
-            padding: 12px 16px;
-            border: 2px solid var(--border-color);
-            border-radius: 10px;
-            font-size: 1rem;
-            background: var(--surface-color);
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            font-size: 0.95rem;
+            background: var(--background-color);
             color: var(--text-primary);
-            transition: all 0.3s ease;
+            transition: border-color 0.2s ease;
             font-family: inherit;
         }
 
         .form-group input:focus {
             outline: none;
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(0, 255, 255, 0.1);
-            transform: translateY(-1px);
         }
 
         .form-group input.error {
             border-color: var(--error-color);
-            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
         }
 
         .form-group input:disabled {
@@ -454,10 +347,10 @@
         /* Error Messages */
         .error-message {
             color: var(--error-color);
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 500;
             display: none;
-            margin-top: 4px;
+            margin-top: 2px;
         }
 
         input.error + .error-message {
@@ -469,17 +362,17 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 10px 0;
+            padding: 8px 0;
         }
 
         .solved-checkbox {
-            width: 20px;
-            height: 20px;
-            border-radius: 6px;
-            border: 2px solid var(--border-color);
-            background: var(--surface-color);
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            background: var(--background-color);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             appearance: none;
             position: relative;
         }
@@ -493,7 +386,7 @@
             content: '✓';
             position: absolute;
             color: white;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: bold;
             top: 50%;
             left: 50%;
@@ -501,25 +394,25 @@
         }
 
         .checkbox-container label {
-            font-weight: 600;
+            font-weight: 500;
             color: var(--text-secondary);
             cursor: pointer;
             user-select: none;
+            font-size: 0.9rem;
         }
 
         /* Delete Button */
         .delete-btn {
-            padding: 12px 20px;
+            padding: 10px 16px;
             background: var(--error-color);
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: var(--radius);
             cursor: not-allowed;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
             opacity: 0.5;
-            box-shadow: var(--shadow);
         }
 
         .delete-btn.enabled {
@@ -529,43 +422,26 @@
         }
 
         .delete-btn.enabled:hover {
-            background: #b91c1c;
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
+            background: #d9363e;
         }
 
-        /* Note Container - Matching Account Page Design */
+        /* Note Container - Clean Design */
         .note-container {
-            background: linear-gradient(135deg, var(--surface-color), var(--background-color));
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: var(--shadow-xl);
+            background: var(--surface-color);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .note-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary-color), #ff00ff, var(--primary-color));
-            background-size: 200% 100%;
-            animation: shimmer 3s infinite linear;
         }
 
         #note {
-            color: var(--primary-color);
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 20px;
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+            gap: 8px;
         }
 
         .form-note {
@@ -574,45 +450,41 @@
 
         #note-text {
             width: 100%;
-            padding: 20px;
-            border: 2px solid var(--border-color);
-            border-radius: 16px;
+            padding: 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
             background: var(--background-color);
             color: var(--text-primary);
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-family: inherit;
             line-height: 1.6;
             resize: vertical;
-            min-height: 200px;
-            transition: all 0.3s ease;
-            border-left: 5px solid var(--primary-color);
+            min-height: 150px;
+            transition: border-color 0.2s ease;
         }
 
         #note-text:focus {
             outline: none;
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(0, 255, 255, 0.1);
         }
 
         .copy-btn {
             position: absolute;
-            bottom: 15px;
-            right: 15px;
-            background: var(--gradient-primary);
-            color: #1a1a1a;
+            bottom: 12px;
+            right: 12px;
+            background: var(--primary-color);
+            color: white;
             border: none;
-            border-radius: 8px;
-            padding: 8px 12px;
+            border-radius: var(--radius);
+            padding: 6px 12px;
             cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow);
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
         }
 
         .copy-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
+            background: var(--primary-hover);
         }
 
         .copy-btn::before {
@@ -625,42 +497,41 @@
 
         /* Reset Button */
         .reset-btn-container {
-            margin-top: 20px;
+            margin-top: 16px;
             text-align: center;
         }
 
         .reset-btn {
-            background: var(--gradient-primary);
-            color: #1a1a1a;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 10px;
+            background: var(--surface-color);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 10px 24px;
+            border-radius: var(--radius);
             cursor: pointer;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
         }
 
         .reset-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
+            background: var(--border-light);
+            border-color: var(--primary-color);
         }
 
-        /* Footer - Matching Account Page */
+        /* Footer - Clean Design */
         .footer {
             text-align: center;
-            padding: 30px 0;
-            margin-top: 40px;
+            padding: 24px 0;
+            margin-top: 30px;
             border-top: 1px solid var(--border-color);
             color: var(--text-secondary);
-            font-size: 0.9rem;
-            background: linear-gradient(135deg, var(--surface-color), var(--background-color));
+            font-size: 0.85rem;
+            background: var(--surface-color);
         }
 
         #year {
             color: var(--primary-color);
-            font-weight: 600;
+            font-weight: 500;
         }
 
         /* Responsive Design */
@@ -671,13 +542,13 @@
 
             .navbar {
                 flex-direction: column;
-                gap: 15px;
+                gap: 12px;
                 text-align: center;
                 padding: 1rem;
             }
 
             .nav-links {
-                gap: 15px;
+                gap: 12px;
             }
 
             main {
@@ -687,19 +558,18 @@
             .form-container,
             .note-container {
                 padding: 20px;
-                border-radius: 16px;
             }
 
             #form-title {
-                font-size: 1.5rem;
-            }
-
-            #note {
                 font-size: 1.3rem;
             }
 
+            #note {
+                font-size: 1.2rem;
+            }
+
             .form-row {
-                padding: 15px;
+                padding: 12px;
             }
         }
 
@@ -711,27 +581,27 @@
             }
 
             .toast {
-                padding: 12px;
+                padding: 10px;
             }
 
             .navbar-brand {
-                font-size: 1.5rem;
+                font-size: 1.3rem;
             }
 
             #timer {
-                font-size: 1rem;
-                padding: 6px 12px;
+                font-size: 0.9rem;
+                padding: 4px 8px;
             }
 
             #theme-toggle {
-                padding: 8px 10px;
-                font-size: 1.1rem;
+                padding: 6px 10px;
+                font-size: 1rem;
             }
         }
 
         /* Scrollbar Styling */
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
 
         ::-webkit-scrollbar-track {
@@ -739,18 +609,17 @@
         }
 
         ::-webkit-scrollbar-thumb {
-            background: var(--primary-color);
-            border-radius: 4px;
+            background: var(--border-color);
+            border-radius: 3px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-dark);
+            background: var(--text-muted);
         }
 
         /* Selection Styling */
         ::selection {
-            background: rgba(0, 255, 255, 0.3);
-            color: var(--text-primary);
+            background: rgba(22, 119, 255, 0.2);
         }
 
         /* Focus Styles */
@@ -758,7 +627,7 @@
         input:focus,
         textarea:focus {
             outline: 2px solid var(--primary-color);
-            outline-offset: 2px;
+            outline-offset: 1px;
         }
     </style>
 </head>
@@ -774,12 +643,12 @@
                 <button id="theme-toggle" aria-label="Switch to dark theme">🌙</button>
             </div>
         </nav>
-    </header><br>
+    </header>
 
     <main class="container" id="main-content">
         <div class="form-container">
             <form id="userForm" aria-labelledby="form-title">
-                <h2 id="form-title"> Pin your Issue</h2><br />
+                <h2 id="form-title">Pin your Issue</h2>
                 <div id="form-rows-container">
                     <!-- Form rows will be dynamically added here -->
                 </div>
@@ -791,21 +660,19 @@
             <form id="NoteForm">
                 <div class="form-note">
                     <textarea id="note-text" rows="8" placeholder="Enter your note here"></textarea>
-                    <button type="button" class="copy-btn" onclick="copyToClipboard('note-text')" title="Copy note">
-                    </button>
+                    <button type="button" class="copy-btn" onclick="copyToClipboard('note-text')" title="Copy note"></button>
                     <div id="note-error" class="error-message"></div>
                 </div>
                 <div class="reset-btn-container">
                     <button type="reset" onclick="return confirmReset()" class="reset-btn">Reset</button>
                 </div>
-            </section>
-
-        </main>
             </form>
-            <footer class="footer">
-                © <span id="year"></span> HritishShaqya. All rights reserved.
-            </footer>
-    
+        </section>
+    </main>
+
+    <footer class="footer">
+        © <span id="year"></span> HritishShaqya. All rights reserved.
+    </footer>
 
     <script>
         function showToast({ title, message, type = 'info', duration = 5000 }) {
@@ -828,32 +695,22 @@
                     <div class="toast-message">${message}</div>
                 </div>
                 <span class="toast-close">&times;</span>
-                <div class="toast-progress">
-                    <div class="toast-progress-bar" style="animation-duration: ${duration}ms"></div>
-                </div>
             `;
             
             const closeBtn = toast.querySelector('.toast-close');
             closeBtn.addEventListener('click', () => {
-                removeToast(toast);
+                toast.remove();
             });
             
             toastContainer.appendChild(toast);
             
             if (duration > 0) {
                 setTimeout(() => {
-                    removeToast(toast);
+                    toast.remove();
                 }, duration);
             }
             
             return toast;
-        }
-        
-        function removeToast(toast) {
-            toast.style.animation = 'slideOut 0.3s ease-out forwards';
-            toast.addEventListener('animationend', () => {
-                toast.remove();
-            });
         }
         
         function copyToClipboard(fieldId) {
@@ -862,7 +719,7 @@
             
             if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
                 element.select();
-                element.setSelectionRange(0, 99999); // For mobile devices
+                element.setSelectionRange(0, 99999);
             } else {
                 const range = document.createRange();
                 range.selectNode(element);
@@ -1127,7 +984,7 @@
                         <i class="fas fa-phone"></i> Contact Number
                         <i class="fas fa-clipboard copy-icon" onclick="copyToClipboard('phone-${timestamp}')" title="Copy phone number"></i>
                     </label>
-                    <input type="tel" id="phone-${timestamp}" name="phone" placeholder="Contact Number." required pattern="^\\d{7,15}$" maxlength="15" onkeypress="restrictToNumbers(event)" aria-describedby="phone-${timestamp}-error" />
+                    <input type="tel" id="phone-${timestamp}" name="phone" placeholder="Contact Number" required pattern="^\\d{7,15}$" maxlength="15" onkeypress="restrictToNumbers(event)" aria-describedby="phone-${timestamp}-error" />
                     <div class="error-message" id="phone-${timestamp}-error">Please enter a valid phone number (7-15 digits)</div>
                 </div>
                 <div class="form-group username">
@@ -1135,7 +992,7 @@
                         <i class="fas fa-user"></i> Username
                         <i class="fas fa-clipboard copy-icon" onclick="copyToClipboard('username-${timestamp}')" title="Copy username"></i>
                     </label>
-                    <input type="text" id="username-${timestamp}" name="username" placeholder="Enter username" required aria-describedby="username-${timestamp}-error" />
+                    <input type="text" id="username-${timestamp}" name="username" placeholder="enter username" required aria-describedby="username-${timestamp}-error" />
                     <div class="error-message" id="username-${timestamp}-error">Please enter a valid username</div>
                 </div>
                 <div class="form-group issue">
