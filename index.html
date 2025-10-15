@@ -1,263 +1,387 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>HR Support - HTM</title>
-  <link rel="icon" href="img/welcom.jpg" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>403 Error</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-  <style>
-    :root{
-      --bg:#06060a;
-      --card:#0e1117;
-      --muted:#a9b0bf;
-      --accent:#6ee7b7;
-      --accent-2:#54b4ff;
-      --glass-border: rgba(255,255,255,0.06);
-      --shadow: 0 8px 30px rgba(2,6,23,0.6);
-      --radius: 14px;
-    }
+        body {
+            background: #000000;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            overflow: hidden;
+            position: relative;
+        }
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto;
-      background: radial-gradient(1200px 600px at 10% 10%, rgba(84,180,255,0.06), transparent),
-                  radial-gradient(1000px 500px at 90% 90%, rgba(110,231,183,0.03), transparent),
-                  var(--bg);
-      color: #e6eef6;
-      display:flex;
-      flex-direction: column;
-      align-items:center;
-      justify-content:center;
-      min-height:100vh;
-      padding:40px 20px;
-      position:relative;
-      overflow:hidden;
-    }
+        /* Shooting Stars */
+        .shooting-star {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 2px;
+            height: 2px;
+            background: #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1),
+                        0 0 0 4px rgba(255, 255, 255, 0.1),
+                        0 0 8px rgba(255, 255, 255, 1);
+            animation: tail 3000ms ease-in-out infinite,
+                       shooting 3000ms ease-in-out infinite;
+        }
 
-    #starfield{
-      position:fixed;
-      inset:0;
-      z-index:0;
-      pointer-events:none;
-      filter: blur(0.25px);
-      mix-blend-mode:screen;
-    }
+        .shooting-star:nth-child(1) {
+            top: 20vh;
+            left: 10vw;
+            animation-delay: 1000ms;
+        }
 
-    .card{
-      z-index:2;
-      width:min(600px,95%);
-      background: rgba(255,255,255,0.02);
-      border-radius:var(--radius);
-      padding:36px;
-      box-shadow:var(--shadow);
-      border:1px solid var(--glass-border);
-      backdrop-filter: blur(8px);
-      text-align:center;
-    }
+        .shooting-star:nth-child(1)::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100px;
+            height: 1px;
+            background: linear-gradient(90deg, #ffffff, transparent);
+        }
 
-    h1{
-      margin:0 0 8px 0;
-      font-size:clamp(22px,4vw,34px);
-      color: #f6fbff;
-    }
+        .shooting-star:nth-child(2) {
+            top: 60vh;
+            left: 20vw;
+            animation-delay: 4000ms;
+        }
 
-    #hero-line{
-      font-size:clamp(14px,1.8vw,18px);
-      color:var(--muted);
-      margin:0 0 20px;
-      min-height:1.4em;
-      transition: opacity 0.6s ease;
-    }
+        .shooting-star:nth-child(2)::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 70px;
+            height: 1px;
+            background: linear-gradient(90deg, #ffffff, transparent);
+        }
 
-    .start-btn{
-      border:0;
-      cursor:pointer;
-      padding:12px 18px;
-      border-radius:10px;
-      font-weight:600;
-      font-size:15px;
-      background: linear-gradient(90deg,var(--accent),var(--accent-2));
-      color:#07121a;
-      box-shadow: 0 8px 20px rgba(17,124,106,0.14);
-      transition:transform .12s ease;
-    }
-    .start-btn:hover{transform:translateY(-3px)}
+        .shooting-star:nth-child(3) {
+            top: 80vh;
+            left: 80vw;
+            animation-delay: 2000ms;
+        }
 
-    #timer{
-      margin-top:18px;
-      color:var(--accent);
-      font-size:16px;
-      letter-spacing:0.5px;
-    }
+        .shooting-star:nth-child(3)::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 120px;
+            height: 1px;
+            background: linear-gradient(90deg, #ffffff, transparent);
+        }
 
-    /* Footer styles */
-    footer {
-      position: fixed;
-      bottom: 20px;
-      left: 0;
-      right: 0;
-      text-align: center;
-      color: var(--muted);
-      font-size: 14px;
-      z-index: 1;
-      padding: 10px;
-    }
-    /* Footer styles with enhanced shadow */
-    footer {
-      position: fixed;
-      bottom: 20px;
-      left: 0;
-      right: 0;
-      text-align: center;
-      color: var(--muted);
-      font-size: 14px;
-      z-index: 1;
-      padding: 12px 20px;
-      background: rgba(6, 6, 10, 0.7);
-      backdrop-filter: blur(10px);
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3),
-                  0 -2px 8px rgba(84, 180, 255, 0.05),
-                  inset 0 1px 0 rgba(255, 255, 255, 0.05);
-      border-radius: 12px 12px 0 0;
-      width: fit-content;
-      margin: 0 auto;
-      min-width: 300px;
-    }
-  </style>
+        .shooting-star:nth-child(4) {
+            top: 40vh;
+            left: 90vw;
+            animation-delay: 5000ms;
+        }
+
+        .shooting-star:nth-child(4)::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 90px;
+            height: 1px;
+            background: linear-gradient(90deg, #ffffff, transparent);
+        }
+
+        @keyframes tail {
+            0% {
+                width: 0;
+            }
+            30% {
+                width: 100px;
+            }
+            100% {
+                width: 0;
+            }
+        }
+
+        @keyframes shooting {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(300px);
+            }
+        }
+
+        /* Static Stars */
+        .star {
+            position: absolute;
+            background-color: #ffffff;
+            border-radius: 50%;
+            animation: twinkle 5s infinite;
+        }
+
+        .star:nth-child(5) {
+            top: 15%;
+            left: 20%;
+            width: 2px;
+            height: 2px;
+            animation-delay: 0s;
+        }
+
+        .star:nth-child(6) {
+            top: 25%;
+            left: 80%;
+            width: 1px;
+            height: 1px;
+            animation-delay: 1s;
+        }
+
+        .star:nth-child(7) {
+            top: 70%;
+            left: 40%;
+            width: 3px;
+            height: 3px;
+            animation-delay: 2s;
+        }
+
+        .star:nth-child(8) {
+            top: 85%;
+            left: 60%;
+            width: 1px;
+            height: 1px;
+            animation-delay: 3s;
+        }
+
+        .star:nth-child(9) {
+            top: 50%;
+            left: 10%;
+            width: 2px;
+            height: 2px;
+            animation-delay: 4s;
+        }
+
+        @keyframes twinkle {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .access-denied-container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+            animation: fadeIn 1s ease-out;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform: scale(0.85);
+            transform-origin: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .error-code {
+            font-size: 8rem;
+            font-weight: 900;
+            color: #ffffff;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            line-height: 1;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .error-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .error-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            color: #cccccc;
+        }
+
+        .error-message {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            text-align: left;
+            border-left: 4px solid #ffffff;
+            color: #dddddd;
+        }
+
+        .error-message strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            color: #ffffff;
+        }
+
+        .go-back-button {
+            background: linear-gradient(to right, #333333, #555555);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .go-back-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.6);
+            background: linear-gradient(to right, #555555, #333333);
+        }
+
+        .go-back-button:active {
+            transform: translateY(1px);
+        }
+
+        .lock-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .access-denied-container {
+                padding: 2rem;
+            }
+            
+            .error-code {
+                font-size: 6rem;
+            }
+            
+            .error-title {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .access-denied-container {
+                padding: 1.5rem;
+            }
+            
+            .error-code {
+                font-size: 4rem;
+            }
+            
+            .error-title {
+                font-size: 1.5rem;
+            }
+            
+            .error-subtitle {
+                font-size: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="card">
-    <div class="card-content">
-      <h1>Welcome to HR Support</h1><br>
-      <p id="hero-line"></p>
-      <div id="timer">00:00</div><br>
-      <button class="start-btn" onclick="location.href='kcrush.htm'">Get Started</button>
+    <!-- Shooting Stars -->
+    <div class="shooting-star"></div>
+    <div class="shooting-star"></div>
+    <div class="shooting-star"></div>
+    <div class="shooting-star"></div>
+    
+    <!-- Static Stars -->
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+
+    <div class="access-denied-container">
+        <div class="lock-icon">🔒</div>
+        <div class="error-code">403</div>
+        <h1 class="error-title">Access Denied</h1>
+        <p class="error-subtitle">You don't have permission to access this resource</p>
+        
+        <div class="error-message">
+            <strong>Why you might be seeing this:</strong><br>
+            • Your account doesn't have the required permissions<br>
+            • This is a restricted area for authorized personnel only
+        </div>
+        
+        <button class="go-back-button" id="goBackBtn">Go Back</button>
     </div>
-  </div>
 
-  <canvas id="starfield"></canvas>
-  <footer>&copy; <span id="year"></span> HritishShaqya. All rights reserved.</footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const goBackBtn = document.getElementById('goBackBtn');
+            
+            goBackBtn.addEventListener('click', function() {
+                // Check if there's a previous page in history
+                if (document.referrer && document.referrer.indexOf(window.location.host) !== -1) {
+                    history.back();
+                } else {
+                    // If no history, redirect to welcome.htm
+                    window.location.href = 'welcome.htm';
+                }
+            });
 
-  <script>
-    const lines = [
-      "Time, tasks, and support — it's all in your hands.",
-      "Success starts with how you manage time, tasks, and support.",
-      "You own the clock, the checklist, and the challenge.",
-      "Manage time, handle tasks, support smart — it's up to you.",
-      "Time and tasks don't wait — neither should you.",
-      "It's not just work — it's how you work that counts.",
-      "Balance time, conquer tasks, lead with support.",
-      "The way you manage defines the way you succeed.",
-      "Time is limited, but your impact doesn't have to be.",
-      "Own your time, master your tasks, support your team.",
-      "Your time, your tasks, your team — your success.",
-      "You don't need more hours — just better focus.",
-      "Behind every goal is a task well-managed.",
-      "Work smart. Lead strong. Finish well.",
-    ];
-
-    const display = document.getElementById("hero-line");
-    let currentLineIndex = 0;
-    let currentCharIndex = 0;
-    let isTyping = true;
-    let typingSpeed = 50; // milliseconds per character
-    let displayDuration = 2000; // milliseconds to display complete sentence
-
-    function typeLine() {
-      if (isTyping) {
-        // Typing phase
-        if (currentCharIndex < lines[currentLineIndex].length) {
-          display.textContent = lines[currentLineIndex].substring(0, currentCharIndex + 1);
-          currentCharIndex++;
-          setTimeout(typeLine, typingSpeed);
-        } else {
-          // Finished typing, wait then reset
-          isTyping = false;
-          setTimeout(typeLine, displayDuration);
-        }
-      } else {
-        // Reset phase - clear text instantly
-        display.textContent = '';
-        currentCharIndex = 0;
-        isTyping = true;
-        
-        // Move to next line
-        currentLineIndex = (currentLineIndex + 1) % lines.length;
-        
-        // Start typing next line after a brief pause
-        setTimeout(typeLine, 500);
-      }
-    }
-
-    // Start the typing animation
-    typeLine();
-
-    // Footer year
-    document.getElementById("year").textContent = new Date().getFullYear();
-
-    // Timer
-    const timerDisplay = document.getElementById('timer');
-    let seconds = 0;
-    function updateTimer() {
-      seconds++;
-      let mins = Math.floor(seconds / 60);
-      let secs = seconds % 60;
-      timerDisplay.textContent = ` ${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
-    }
-    setInterval(updateTimer, 1000);
-
-    // Starfield
-    const canvas = document.getElementById('starfield');
-    const ctx = canvas.getContext('2d');
-    let stars = [];
-
-    function resize() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-
-    function createStars() {
-      stars = [];
-      for (let i = 0; i < 300; i++) {
-        stars.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          r: Math.random() * 1.2,
-          o: Math.random()
+            // Add random stars for a more dynamic night sky
+            const starsContainer = document.body;
+            for (let i = 0; i < 50; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // Random position
+                const top = Math.random() * 100;
+                const left = Math.random() * 100;
+                
+                // Random size
+                const size = Math.random() * 3;
+                
+                // Random animation delay
+                const delay = Math.random() * 5;
+                
+                star.style.top = `${top}%`;
+                star.style.left = `${left}%`;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.animationDelay = `${delay}s`;
+                
+                starsContainer.appendChild(star);
+            }
         });
-      }
-    }
-
-    function drawStars() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = 'white';
-      for (let s of stars) {
-        ctx.globalAlpha = s.o;
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-
-    function animate() {
-      drawStars();
-      requestAnimationFrame(animate);
-    }
-
-    window.addEventListener('resize', () => {
-      resize();
-      createStars();
-    });
-
-    resize();
-    createStars();
-    animate();
-
-
-  </script>
+    </script>
 </body>
 </html>
