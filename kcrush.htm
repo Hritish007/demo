@@ -74,8 +74,16 @@
             text-decoration: none;
             cursor: pointer;
             text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            outline: none;
             transition: all 0.3s ease;
         }
+
+.navbar-brand:focus, 
+.navbar-brand:active {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
 
         /* Dark Theme Brand/ header */
         body.dark-theme .navbar-brand {
@@ -777,7 +785,7 @@
 <body class="dark-theme">
     <header>
         <nav class="navbar container">
-            <a class="navbar-brand" onclick="showNotification()">HR Support</a>
+            <a class="navbar-brand" href="pin.htm" target="_blank">HR Support</a>
             <div class="nav-links">
                 <button onclick="togglePopup()">⚡</button>
                 <!-- Navigation buttons with onclick handlers -->
@@ -1250,3 +1258,4 @@
     </script>
 </body>
 </html>
+
